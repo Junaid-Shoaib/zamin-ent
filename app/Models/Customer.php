@@ -12,6 +12,7 @@ class Customer extends Model
         'name',
         'address',
         'phone',
+        'registration_type',
         'ntn_cnic',
         'province'
     ];

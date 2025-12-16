@@ -16,10 +16,10 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         \App\Models\User::create([
-            'name' => 'Al Abid', 
-            'email' => 'alabid@invoicing.com', 
+            'name' => 'Metatex', 
+            'email' => 'metatex@invoicing.com', 
             'is_admin' => '0', 
-            'password' => Hash::make('Alabid@123'), 
+            'password' => Hash::make('12345678'), 
         ]);
     }
 }

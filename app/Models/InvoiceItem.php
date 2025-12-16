@@ -28,11 +28,11 @@ class InvoiceItem extends Model
     // Relationship: InvoiceItem belongs to Invoice
     public function invoice()
     {
-        return $this->belongsTo(Invoice::class);
+        return $this->belongsTo(Invoice::class, 'invoice_id', 'id');
     }
 
     // Relationship: InvoiceItem belongs to Item
-    public function item()
+   public function item()
     {
         return $this->belongsTo(Item::class);
     }

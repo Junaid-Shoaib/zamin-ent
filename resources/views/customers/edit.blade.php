@@ -33,6 +33,14 @@
                         </div>
 
                         <div class="form-group mb-3">
+                            <label>Customer Registration type *</label>
+                            <select name="registration_type" class="form-control" required>
+                                <option value="Registered" {{ $customer->registration_type == 'Registered' ? 'selected' : '' }}>Registered</option>
+                                <option value="Unregistered" {{ $customer->registration_type == 'Unregistered' ? 'selected' : '' }}>Unregistered</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group mb-3">
                             <label for="phone">Phone</label>
                             <input type="text" name="phone" class="form-control" value="{{ $customer->phone }}">
                         </div>

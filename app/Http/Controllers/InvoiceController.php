@@ -76,9 +76,8 @@ class InvoiceController extends Controller
                 ->rawColumns(['fbr_invoice_no','action'])
                 ->make(true);
         }
-        $customers = Customer::orderBy('name')->get();
-        $items = InvoiceItem::orderBy('product_name','ASC')->get('product_name');
-
+        $customers = Customer::orderBy('name','ASC')->get();
+        $items = InvoiceItem::select('id','invoice_id','product_name')->orderBy('product_name','ASC')->get();
         return view('invoices.index', compact('customers','items'));
     }
 
@@ -159,6 +158,7 @@ class InvoiceController extends Controller
         $request->validate([
             'customer_id' => 'required',
             'registration_type' => 'required',
+            'reference_no' => 'required',
             'date_of_supply' => 'required|date',
             'time_of_supply' => 'required',
             'items' => 'required|array',
@@ -167,7 +167,7 @@ class InvoiceController extends Controller
             'items.*.uom' => 'required',
             'items.*.description' => 'required',
             'items.*.unit_price' => 'required|numeric',
-            'items.*.quantity' => 'required|integer|min:1',
+            'items.*.quantity' => 'required|numeric|min:1',
             'items.*.value_of_goods' => 'required|numeric',
             'items.*.sale_tax_rate' => 'required|numeric',
             'items.*.amount_of_saleTax' => 'required|numeric',
@@ -189,6 +189,7 @@ class InvoiceController extends Controller
             'customer_id' => $request->customer_id,
             'registration_type' => $request->registration_type,
             'invoice_no' => $invoiceNo,
+            'reference_no' => $request->reference_no,
             'date_of_supply' => $request->date_of_supply,
             'time_of_supply' => $request->time_of_supply,
         ]);
@@ -216,13 +217,14 @@ class InvoiceController extends Controller
             'registration_type' => 'required',
             'date_of_supply' => 'required|date',
             'time_of_supply' => 'required',
+            'reference_no' => 'required',
             'items' => 'required|array',
             'items.*.hs_code' => 'required',
             'items.*.product_name' => 'required',
             'items.*.uom' => 'required',
             'items.*.description' => 'required',
             'items.*.unit_price' => 'required|numeric',
-            'items.*.quantity' => 'required|integer|min:1',
+            'items.*.quantity' => 'required|numeric|min:1',
             'items.*.value_of_goods' => 'required|numeric',
             'items.*.sale_tax_rate' => 'required|numeric',
             'items.*.amount_of_saleTax' => 'required|numeric',
@@ -236,6 +238,7 @@ class InvoiceController extends Controller
             'customer_id' => $request->customer_id,
             'registration_type' => $request->registration_type,
             'date_of_supply' => $request->date_of_supply,
+            'reference_no' => $request->reference_no,
             'time_of_supply' => $request->time_of_supply,
         ]);
 

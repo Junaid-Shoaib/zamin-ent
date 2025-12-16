@@ -23,6 +23,7 @@
                                     <th>Name</th>
                                     <th>Address</th>
                                     <th>Phone</th>
+                                    <th>Registration Type</th>
                                     <th>NTN/CNIC</th>
                                     <th>Action</th>
                                 </tr>
@@ -47,6 +48,7 @@ $(function() {
             { data: 'name', name: 'name' },
             { data: 'address', name: 'address' },
             { data: 'phone', name: 'phone' },
+            { data: 'registration_type', name: 'registration_type' },
             { data: 'ntn_cnic', name: 'ntn_cnic' },
             { data: 'action', name: 'action', orderable: false, searchable: false }
         ],

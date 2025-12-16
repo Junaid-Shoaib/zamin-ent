@@ -17,7 +17,7 @@
                         <select name="customer_id" class="form-control">
                             <option value="">-- All Customers --</option>
                             @foreach($customers as $customer)
-                                <option value="{{ $customer->id }}">{{ $customer->name }}</option>
+                                <option value="{{ $customer->id }}">{{ $customer->name }} - {{ $customer->address }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -25,7 +25,7 @@
                         <select name="product_name" class="form-control">
                             <option value="">-- Product Name --</option>
                             @foreach($items as $item)
-                                <option value="{{ $item->product_name }}">{{ $item->product_name }}</option>
+                                <option value="{{ $item->product_name }}">{{ $item->product_name }} - {{ $item->invoice->invoice_no }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -54,7 +54,7 @@
                                     <th>Date</th>
                                     <th>Time</th>
                                     <th>FBR Invoice No</th>
-                                    <th>Registration Type</th>
+                                    <th>Ref No</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -88,7 +88,7 @@
             { data: 'date_of_supply', name: 'date_of_supply' },
             { data: 'time_of_supply', name: 'time_of_supply' },
             { data: 'fbr_invoice_no', name: 'fbr_invoice_no' },
-            { data: 'registration_type', name: 'registration_type' },
+            { data: 'reference_no', name: 'reference_no' },
             { data: 'action', name: 'action', orderable: false, searchable: false },
         ]
     });

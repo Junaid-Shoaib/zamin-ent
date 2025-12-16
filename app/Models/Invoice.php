@@ -11,6 +11,7 @@ class Invoice extends Model
     protected $fillable = [
         'customer_id',
         'invoice_no',
+        'reference_no',
         'date_of_supply',
         'time_of_supply',
         'fbr_invoice_no',

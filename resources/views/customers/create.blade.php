@@ -33,6 +33,13 @@
                             <label for="phone">Phone</label>
                             <input type="text" name="phone" value="{{ old('phone') }}" class="form-control">
                         </div>
+                        <div class="form-group mb-3">
+                            <label>Customer Registration type *</label>
+                            <select name="registration_type" class="form-control" required>
+                                <option value="Registered" {{ old('registration_type') == 'Registered' ? 'selected' : '' }}>Registered</option>
+                                <option value="Unregistered" {{ old('registration_type') == 'Unregistered' ? 'selected' : '' }}>Unregistered</option>
+                            </select>
+                        </div>
 
                         <div class="form-group mb-3">
                             <label for="ntn_cnic">NTN / CNIC</label>
