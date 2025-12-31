@@ -28,6 +28,7 @@
     <table>
         <thead>
             <tr>
+		<th>Ref No</th>
                 <th>Invoice No</th>
                 <th>Customer</th>
                 <th>Date of Supply</th>
@@ -42,6 +43,7 @@
         <tbody>
             @foreach($invoices as $invoice)
                 <tr>
+		    <td>{{ $invoice->reference_no ?? ''}}</td>
                     <td>{{ $invoice->invoice_no }}</td>
                     <td>{{ $invoice->customer->name ?? '' }}</td>
                     <td>{{ $invoice->date_of_supply }}</td>
@@ -54,7 +56,7 @@
                 </tr>
             @endforeach
             <tr class="totals">
-                <td colspan="4">TOTAL</td>
+                <td colspan="5">TOTAL</td>
                 <td>{{ number_format($totals['totalBeforeTax'], 2) }}</td>
                 <td>{{ number_format($totals['saleTax'], 2) }}</td>
                 <td>{{ number_format($totals['extraTax'], 2) }}</td>

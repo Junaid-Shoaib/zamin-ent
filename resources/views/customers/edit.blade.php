@@ -29,7 +29,7 @@
 
                         <div class="form-group mb-3">
                             <label for="address">Address</label>
-                            <input type="text" name="address" class="form-control" value="{{ $customer->address }}">
+                            <input type="text" name="address" class="form-control" value="{{ $customer->address }}" required>
                         </div>
 
                         <div class="form-group mb-3">
@@ -42,17 +42,17 @@
 
                         <div class="form-group mb-3">
                             <label for="phone">Phone</label>
-                            <input type="text" name="phone" class="form-control" value="{{ $customer->phone }}">
+                            <input type="text" name="phone" class="form-control" value="{{ $customer->phone }}" required>
                         </div>
 
                         <div class="form-group mb-3">
                             <label for="ntn_cnic">NTN / CNIC</label>
-                            <input type="number" name="ntn_cnic" class="form-control" value="{{ $customer->ntn_cnic }}">
+                            <input type="text" name="ntn_cnic" class="form-control" value="{{ $customer->ntn_cnic }}" required>
                         </div>
 
                         <div class="form-group mb-3">
                             <label for="province">Destination Provice</label>
-                            <input type="text" name="province" class="form-control" value="{{ $customer->province }}">
+                            <input type="text" name="province" class="form-control" value="{{ $customer->province }}" required>
                         </div>
 
                         <button type="submit" class="btn btn-primary">Update Customer</button>

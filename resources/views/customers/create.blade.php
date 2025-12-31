@@ -26,12 +26,12 @@
                         </div>
                         <div class="form-group mb-3">
                             <label for="address">Address</label>
-                            <input type="text" name="address" value="{{ old('address') }}" class="form-control">
+                            <input type="text" name="address" value="{{ old('address') }}" class="form-control" required>
                         </div>
 
                         <div class="form-group mb-3">
                             <label for="phone">Phone</label>
-                            <input type="text" name="phone" value="{{ old('phone') }}" class="form-control">
+                            <input type="text" name="phone" value="{{ old('phone') }}" class="form-control" required>
                         </div>
                         <div class="form-group mb-3">
                             <label>Customer Registration type *</label>
@@ -43,11 +43,11 @@
 
                         <div class="form-group mb-3">
                             <label for="ntn_cnic">NTN / CNIC</label>
-                            <input type="number" name="ntn_cnic" value="{{ old('ntn_cnic') }}" class="form-control">
+                            <input type="text" name="ntn_cnic" value="{{ old('ntn_cnic') }}" class="form-control" required>
                         </div>
                         <div class="form-group mb-3">
                             <label for="ntn_cnic">Destination Province</label>
-                            <input type="text" name="province" value="{{ old('province') }}" class="form-control">
+                            <input type="text" name="province" value="{{ old('province') }}" class="form-control" required>
                         </div>
 
                         <button type="submit" class="btn btn-primary" id="submit-btn">Save Customer</button>

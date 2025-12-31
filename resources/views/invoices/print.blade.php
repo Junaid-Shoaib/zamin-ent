@@ -120,6 +120,8 @@
             <br>
             <strong>Tax Period:</strong> {{ \Carbon\Carbon::parse($invoice->date_of_supply)->format('Ym') }}</td>
             <td style="text-align: right;">
+		<strong>Reference No: </strong>{{$invoice->reference_no}}
+		<br>
                 <strong>Date:</strong> {{ \Carbon\Carbon::parse($invoice->date_of_supply)->format('d/m/Y') }}
                 {{ \Carbon\Carbon::parse($invoice->time_of_supply)->format('h:i A') }}
             </td>

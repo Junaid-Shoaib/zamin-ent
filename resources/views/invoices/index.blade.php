@@ -1,5 +1,7 @@
 @extends('layouts.app')
 @section('content')
+
+
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12">
@@ -67,13 +69,37 @@
 </div>
 
 @push('scripts')
+<!-- SweetAlert2 JS -->
+
+@if(session('sw_success'))
+<script>
+    Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: "{{ session('sw_success') }}",
+        timer: 2000,
+        showConfirmButton: false
+    });
+</script>
+@endif
+
+@if(session('sw_error'))
+<script>
+    Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: "{{ session('sw_error') }}",
+        confirmButtonText: 'OK'
+    });
+</script>
+@endif
 <script>
     $(function () {
     let table = $('#invoices-table').DataTable({
         processing: true,
         serverSide: true,
         ajax: {
-            url: '{{ route('invoices.index') }}',
+            url: `{{ route('invoices.index') }}`,
             data: function (d) {
                 d.customer_id = $('select[name=customer_id]').val();
                 d.product_name = $('select[name=product_name]').val();

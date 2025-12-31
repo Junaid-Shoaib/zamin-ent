@@ -145,7 +145,7 @@ class InvoiceController extends Controller
 
     public function create()
     {
-        $customers = Customer::all();
+         $customers = Customer::orderBy('name','ASC')->get();
         $items = Item::all();
         return view('invoices.create', compact('customers', 'items'));
     }
@@ -178,12 +178,19 @@ class InvoiceController extends Controller
 
         $prefix = now()->format('Ym');
 
-        $count = Invoice::where('invoice_no', 'LIKE', "{$prefix}-%")->count();
+        // last invoice with same prefix
+        $lastInvoice = Invoice::where('invoice_no', 'LIKE', "{$prefix}-%")
+            ->orderBy('invoice_no', 'desc')
+            ->first();
 
-        $nextNumber = str_pad($count + 1, 3, '0', STR_PAD_LEFT);
+        if ($lastInvoice) {
+            $lastNumber = (int) substr($lastInvoice->invoice_no, -3);
+            $nextNumber = str_pad($lastNumber + 1, 3, '0', STR_PAD_LEFT);
+        } else {
+            $nextNumber = '001';
+        }
 
         $invoiceNo = "{$prefix}-{$nextNumber}";
-
 
         $invoice = Invoice::create([
             'customer_id' => $request->customer_id,

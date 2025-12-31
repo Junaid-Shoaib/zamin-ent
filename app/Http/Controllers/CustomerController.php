@@ -17,7 +17,7 @@ class CustomerController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $customers = Customer::withCount('invoices')->select('customers.*');
+            $customers = Customer::withCount('invoices')->select('customers.*')->orderBy('id','Desc');
 
             return DataTables::of($customers)
                 ->addColumn('action', function ($row) {

@@ -22,6 +22,7 @@ class InvoicesExport implements FromCollection, WithHeadings, WithEvents
     {
         return $this->invoices->map(function ($invoice) {
             return [
+		$invoice->reference_no ?? '',
                 $invoice->invoice_no,
                 $invoice->customer->name ?? '',
                 $invoice->date_of_supply,
@@ -38,6 +39,7 @@ class InvoicesExport implements FromCollection, WithHeadings, WithEvents
     public function headings(): array
     {
         return [
+	    'Ref No',
             'Invoice No',
             'Customer',
             'Date of Supply',
@@ -64,14 +66,14 @@ class InvoicesExport implements FromCollection, WithHeadings, WithEvents
                 $grandTotal = $this->invoices->sum(fn ($i) => $i->items->sum('total'));
 
                 // Set totals in the next row
-                $event->sheet->setCellValue('E' . ($rowCount + 1), $totalBeforeTax);
-                $event->sheet->setCellValue('F' . ($rowCount + 1), $amountOfSaleTax);
-                $event->sheet->setCellValue('G' . ($rowCount + 1), $extraTax);
-                $event->sheet->setCellValue('H' . ($rowCount + 1), $furtherTax);
-                $event->sheet->setCellValue('I' . ($rowCount + 1), $grandTotal);
+                $event->sheet->setCellValue('F' . ($rowCount + 1), $totalBeforeTax);
+                $event->sheet->setCellValue('G' . ($rowCount + 1), $amountOfSaleTax);
+                $event->sheet->setCellValue('H' . ($rowCount + 1), $extraTax);
+                $event->sheet->setCellValue('I' . ($rowCount + 1), $furtherTax);
+                $event->sheet->setCellValue('J' . ($rowCount + 1), $grandTotal);
 
                 // Add "TOTAL" label
-                $event->sheet->setCellValue('D' . ($rowCount + 1), 'TOTAL');
+                $event->sheet->setCellValue('E' . ($rowCount + 1), 'TOTAL');
             }
         ];
     }
