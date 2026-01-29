@@ -11,6 +11,8 @@ use App\Models\Item;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\InvoicesExport;
 use PDF;
+use Illuminate\Validation\Rule;
+
 
 class InvoiceController extends Controller
 {
@@ -158,7 +160,7 @@ class InvoiceController extends Controller
         $request->validate([
             'customer_id' => 'required',
             'registration_type' => 'required',
-            'reference_no' => 'required',
+	    'reference_no' => 'required|unique:invoices,reference_no',
             'date_of_supply' => 'required|date',
             'time_of_supply' => 'required',
             'items' => 'required|array',
@@ -224,7 +226,10 @@ class InvoiceController extends Controller
             'registration_type' => 'required',
             'date_of_supply' => 'required|date',
             'time_of_supply' => 'required',
-            'reference_no' => 'required',
+	    'reference_no' => [
+        		'required',
+        		Rule::unique('invoices', 'reference_no')->ignore($invoice->id),
+    		],
             'items' => 'required|array',
             'items.*.hs_code' => 'required',
             'items.*.product_name' => 'required',

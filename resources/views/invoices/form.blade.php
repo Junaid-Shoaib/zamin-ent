@@ -215,15 +215,32 @@ function calculateRow(row) {
     // 🔥 Registration type check
     const regType = $('select[name="registration_type"]').val();
     if (regType === "Unregistered") {
-        ft = value * 0.04; // 4% of value_of_goods
+        ft = round2(value * 0.04); // 4% of value_of_goods
         row.find('.ft').val(ft.toFixed(2));
     }
 
-    const total = value + tax + et + stw + ft;
+console.log('val ' + value);
+console.log('tax ' + tax);
+const value2 = round2(value);
+const tax2   = round2(tax);
+console.log('val2 ' + value2);
+console.log('tax2 ' + tax2);
+const et2    = round2(et);
+const stw2   = round2(stw);
+const ft2    = round2(ft);
 
-    row.find('.value').val(value.toFixed(2));
-    row.find('.st-amount').val(tax.toFixed(2));
+const total = round2(
+    value2 + tax2 + et2 + stw2 + ft2
+);
+
+
+    row.find('.value').val(value2.toFixed(2));
+    row.find('.st-amount').val(tax2.toFixed(2));
     row.find('.total').val(total.toFixed(2));
+}
+
+function round2(num) {
+    return Math.round((parseFloat(num) || 0) * 100) / 100;
 }
 
 $(document).on('input change', '.unit-price, .quantity, .st-rate, .et, .stw, .ft, select[name="registration_type"]', function () {
