@@ -16,72 +16,164 @@ use Illuminate\Validation\Rule;
 
 class InvoiceController extends Controller
 {
-
     public function index(Request $request)
     {
-
-        $query = Invoice::orderBy('id','Desc');
+        $query = Invoice::with('customer')->orderBy('id', 'Desc');
 
         if ($request->filled('customer_id')) {
             $query->where('customer_id', $request->customer_id);
         }
-        
-        
+
         if ($request->filled('product_name')) {
-            $query->whereHas('items', function($q) use ($request) {
+            $query->whereHas('items', function ($q) use ($request) {
                 $q->where('product_name', $request->product_name);
             });
         }
-        
 
         if ($request->filled('start_date') && $request->filled('end_date')) {
             $query->whereBetween('date_of_supply', [$request->start_date, $request->end_date]);
         }
 
-
-
         if ($request->ajax()) {
-            // $data = Invoice::with('customer')->latest()->get();
             return DataTables::of($query)
-                ->addColumn('customer', fn($row) => $row->customer->name)
-                ->addColumn('fbr_invoice_no', fn($row) => $row->fbr_invoice_no != null ? $row->fbr_invoice_no : '-')
-                ->addColumn('action', function ($row) {
-                    $btn = null;
-                    if ($row->posting == 0) {
-                        $btn .= '<a href="' . route('invoices.edit', $row->id) . '" class="btn btn-sm btn-warning">
-                            <i class="fas fa-edit"></i> Edit
-                        </a>
 
-                        <form action="' . route('invoices.destroy', $row->id) . '" method="POST" style="display:inline-block;">
-                            ' . csrf_field() . method_field("DELETE") . '
-                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm(\'Are you sure?\')">
-                                <i class="fas fa-trash"></i> Delete
-                            </button>
-                        </form> 
-                            <a href="' . route('invoices.posting', $row->id) . '" 
-                                class="btn btn-sm btn-outline-primary ml-2 post-btn"
-                                onclick="return handleInvoicePost(event, this)">
-                                <i class="fas fa-upload"></i> Invoice Post
-                            </a>';
-                    };
-                    $btn .= '
-            			<a href="' . route('invoices.print', $row->id) . '" class="btn btn-sm btn-outline-primary" target="_blank">
-                                <i class="fas fa-print"></i> Print
+                ->filterColumn('customer', function ($query, $keyword) {
+                    $query->whereHas('customer', function ($q) use ($keyword) {
+                        $q->where('name', 'like', "%{$keyword}%");
+                    });
+                })
+
+                ->addColumn('customer', function ($row) {
+                    return $row->customer ? $row->customer->name : '';
+                })
+
+                ->addColumn('fbr_invoice_no', function ($row) {
+                    return $row->fbr_invoice_no ?? '-';
+                })
+
+                ->addColumn('action', function ($row) {
+                    $btn = '';
+
+                    if ($row->posting == 0) {
+                        $btn .= '
+                            <a href="' . route('invoices.edit', $row->id) . '" class="btn btn-sm btn-warning">
+                                <i class="fas fa-edit"></i> Edit
                             </a>
-                            <a href="' . route('invoices.pdf', $row->id) . '" class="btn btn-sm btn-outline-danger" target="_blank">
+
+                            <form action="' . route('invoices.destroy', $row->id) . '" method="POST" style="display:inline-block;">
+                                ' . csrf_field() . method_field('DELETE') . '
+                                <button type="submit" class="btn btn-sm btn-danger"
+                                    onclick="return confirm(\'Are you sure?\')">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </form>
+
+                            <form action="' . route('invoices.posting', $row->id) . '" method="POST"
+                                style="display:inline-block;" class="fbr-post-form">
+                                ' . csrf_field() . '
+                                <button type="submit" class="btn btn-sm btn-outline-primary post-btn">
+                                    <i class="fas fa-upload"></i> Invoice Post
+                                </button>
+                            </form>';
+                    }
+
+                    $btn .= '
+                        <a href="' . route('invoices.print', $row->id) . '" class="btn btn-sm btn-outline-primary" target="_blank">
+                            <i class="fas fa-print"></i> Print
+                        </a>
+                        <a href="' . route('invoices.pdf', $row->id) . '" class="btn btn-sm btn-outline-danger" target="_blank">
                             <i class="fas fa-file-pdf"></i> PDF
                         </a>';
 
-
                     return $btn;
                 })
-                ->rawColumns(['fbr_invoice_no','action'])
+
+                ->rawColumns(['customer', 'fbr_invoice_no', 'action'])
                 ->make(true);
         }
-        $customers = Customer::orderBy('name','ASC')->get();
-        $items = InvoiceItem::select('id','invoice_id','product_name')->orderBy('product_name','ASC')->get();
-        return view('invoices.index', compact('customers','items'));
+
+        $customers = Customer::orderBy('name', 'ASC')->get();
+        $items = InvoiceItem::select('id', 'invoice_id', 'product_name')->orderBy('product_name', 'ASC')->get();
+
+        return view('invoices.index', compact('customers', 'items'));
     }
+    // public function index(Request $request)
+    // {
+
+    //     $query = Invoice::with('customer')->orderBy('id','Desc');
+
+    //     if ($request->filled('customer_id')) {
+    //         $query->where('customer_id', $request->customer_id);
+    //     }
+        
+        
+    //     if ($request->filled('product_name')) {
+    //         $query->whereHas('items', function($q) use ($request) {
+    //             $q->where('product_name', $request->product_name);
+    //         });
+    //     }
+        
+
+    //     if ($request->filled('start_date') && $request->filled('end_date')) {
+    //         $query->whereBetween('date_of_supply', [$request->start_date, $request->end_date]);
+    //     }
+
+
+
+    //     if ($request->ajax()) {
+    //         // $data = Invoice::with('customer')->latest()->get();
+    //         return DataTables::of($query)
+                
+    //             ->filterColumn('customer', function($query, $keyword) {
+    //                 $query->whereHas('customer', function($q) use ($keyword) {
+    //                     $q->where('name', 'like', "%{$keyword}%");
+    //                 });
+    //             })
+
+    //             ->addColumn('customer', function($row){
+    //                 return $row->customer ? $row->customer->name : '';
+    //             })
+    //             // ->addColumn('customer', fn($row) => $row->customer ? $row->customer->name : '')
+    //             ->addColumn('fbr_invoice_no', fn($row) => $row->fbr_invoice_no != null ? $row->fbr_invoice_no : '-')
+    //             ->addColumn('action', function ($row) {
+    //                 $btn = null;
+    //                 if ($row->posting == 0) {
+    //                     $btn .= '<a href="' . route('invoices.edit', $row->id) . '" class="btn btn-sm btn-warning">
+    //                         <i class="fas fa-edit"></i> Edit
+    //                     </a>
+
+    //                     <form action="' . route('invoices.destroy', $row->id) . '" method="POST" style="display:inline-block;">
+    //                         ' . csrf_field() . method_field("DELETE") . '
+    //                         <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm(\'Are you sure?\')">
+    //                             <i class="fas fa-trash"></i> Delete
+    //                         </button>
+    //                     </form> 
+    //                     <form action="' . route('invoices.posting', $row->id) . '" method="POST" 
+    //                         style="display:inline-block;" class="fbr-post-form">
+    //                         ' . csrf_field() . '
+    //                         <button type="submit" class="btn btn-sm btn-outline-primary post-btn">
+    //                             <i class="fas fa-upload"></i> Invoice Post
+    //                         </button>
+    //                     </form>';
+    //                 };
+    //                 $btn .= '
+    //         			<a href="' . route('invoices.print', $row->id) . '" class="btn btn-sm btn-outline-primary" target="_blank">
+    //                             <i class="fas fa-print"></i> Print
+    //                         </a>
+    //                         <a href="' . route('invoices.pdf', $row->id) . '" class="btn btn-sm btn-outline-danger" target="_blank">
+    //                         <i class="fas fa-file-pdf"></i> PDF
+    //                     </a>';
+
+
+    //                 return $btn;
+    //             })
+    //             ->rawColumns(['customer','fbr_invoice_no','action'])
+    //             ->make(true);
+    //     }
+    //     $customers = Customer::orderBy('name','ASC')->get();
+    //     $items = InvoiceItem::select('id','invoice_id','product_name')->orderBy('product_name','ASC')->get();
+    //     return view('invoices.index', compact('customers','items'));
+    // }
 
     public function exportExcel(Request $request)
     {
