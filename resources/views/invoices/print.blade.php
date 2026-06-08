@@ -247,6 +247,15 @@
         <em>{{ ucwords(\NumberFormatter::create('en', NumberFormatter::SPELLOUT)->format($invoice->items->sum('total'))) }}
             only</em>
     </div>
+    <br>
+    <div class="total-summary" style="text-align:left">
+        <ul>
+            <li>Payment should be made in favor of "{{ env('APP_NAME') }}"</li>
+            <li>This is computer generated invoice, therefore no signature is required.</li>
+            <li>In case of any query in this invoice please inform within 3 days from the date of issuance. No changes will be accepeted after 3 days.</li>
+            
+        </ul> 
+    </div>
     <div class="footer-section">
         <table style="width: 100%; margin-top: 40px;">
             <tr>
