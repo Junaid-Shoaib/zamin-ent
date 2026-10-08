@@ -161,7 +161,7 @@ class FbrInvoiceController extends Controller
             } elseif ($statusCode == 401) {
                 return back()->with('sw_error', 'FBR Authentication Failed (Invalid API Key).');
             } else {
-                return back()->with('sw_error', 'Something Went Wrong. Status Code: ' . $statusCode);
+                return back()->with('sw_error', 'Something Went Wrong. Status Code: ' . serialize($responseJson));
             }
 
         } catch (TimeoutException $e) {

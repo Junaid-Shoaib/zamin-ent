@@ -244,8 +244,21 @@
 
     <div class="total-summary" style="text-align:right">
         Amount in Words:
-        <em>{{ ucwords(\NumberFormatter::create('en', NumberFormatter::SPELLOUT)->format($invoice->items->sum('total'))) }}
-            only</em>
+@php
+    $total = (float) $invoice->items->sum('total');
+    $whole = (int) $total;
+    $decimal = (int) round(($total - $whole) * 100);
+
+    $formatter = \NumberFormatter::create('en', \NumberFormatter::SPELLOUT);
+
+    $words = $formatter->format($whole);
+
+    if ($decimal > 0) {
+        $words .= ' and ' . $formatter->format($decimal) . ' Cents';
+    }
+@endphp
+
+        <em>{{ ucwords($words) }}  only</em>
     </div>
     <br>
     <div class="total-summary" style="text-align:left">
